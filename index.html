@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Queen's Masquerade Ball</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === CSS Variables for Color Scheme === */
+        :root {
+            --stark-red: #8b0000;
+            --darker-red: #2a0000;
+            --fox-neon: #ff1a1a;
+            --gold-base: #ffcc00;
+            --gold-glow: #ff4500;
+            --white: #f8f9fa;
+        }
+
+        /* === Base Layout & Background === */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--darker-red) 0%, var(--stark-red) 100%);
+            color: var(--white);
+            font-family: 'Cinzel', 'Georgia', serif;
+            letter-spacing: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* === SVG Container (Perfect Centering & Layering) === */
+        .art-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 0 auto 1.5rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: containerFade 2s ease-in forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* Hand-tailored Gown Silhouette */
+        .silhouette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            fill: #0a0a0a; 
+            filter: drop-shadow(0 0 25px rgba(0, 0, 0, 0.9));
+        }
+
+        /* Floating Ruby Accent (Positioned beautifully at the head space) */
+        .ruby-overlay {
+            position: absolute;
+            top: 4.5%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: auto;
+            opacity: 0;
+            animation: fadeInSimple 2s ease-in forwards;
+            animation-delay: 1.2s;
+            z-index: 3;
+        }
+
+        .ruby-facet {
+            stroke: #4a0006;
+            stroke-width: 0.2;
+            stroke-linejoin: round;
+        }
+
+        /* Geometric Fox Head Layered - Animates slowly upward to mask the face */
+        .fox-outline {
+            position: absolute;
+            left: 50%;
+            width: 55px; 
+            height: auto;
+            opacity: 0;
+            z-index: 2;
+            /* Combined animation: drifts upward, then switches to breathing pulse at destination */
+            animation: 
+                foxRiseMask 5s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+                pulseFox 3s ease-in-out infinite alternate;
+            animation-delay: 1.5s, 6.5s; 
+        }
+
+        .fox-outline fill-rule {
+            fill: none;
+        }
+
+        .fox-outline path, .fox-outline polygon, .fox-outline polyline {
+            fill: none;
+            stroke: var(--fox-neon);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* === Typography Section Centering === */
+        .invitation-text {
+            width: 100%;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: textFadeIn 2s ease-in forwards;
+            animation-delay: 2.5s;
+        }
+
+        .guest-name {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto 0.75rem auto;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+
+        .invitation-body {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin: 0 auto;
+            text-align: center;
+            max-width: 650px;
+        }
+
+        /* Desynchronized Golden Flame CSS Effects */
+        .flame-text {
+            color: var(--gold-base);
+        }
+
+        .guest-name.flame-text {
+            animation: realisticFlicker 3.7s infinite;
+        }
+
+        .invitation-body.flame-text {
+            animation: realisticFlicker 4.3s infinite;
+            animation-delay: 0.2s;
+        }
+
+        /* === Keyframes === */
+        @keyframes containerFade {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes textFadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInSimple {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Fox rises from the bodice chest level (26%) to mask the face level (7.5%) */
+        @keyframes foxRiseMask {
+            0% { 
+                opacity: 0; 
+                top: 50%; 
+                transform: translate(-50%, -50%);
+                filter: drop-shadow(0 0 4px var(--fox-neon));
+            }
+            30% {
+                opacity: 1;
+            }
+            100% { 
+                opacity: 1; 
+                top: 15%; 
+                transform: translate(-50%, -50%);
+                filter: drop-shadow(0 0 10px var(--fox-neon));
+            }
+        }
+
+        /* Hardware-accelerated glow pulse for the fox outline once settled */
+        @keyframes pulseFox {
+            0% { filter: drop-shadow(0 0 6px var(--fox-neon)) brightness(0.9); }
+            100% { filter: drop-shadow(0 0 18px var(--fox-neon)) brightness(1.3); }
+        }
+
+        /* Highly detailed fire flicker for the text */
+        @keyframes realisticFlicker {
+            0%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-base), 0 0 20px var(--gold-glow), 0 0 30px #8b0000; opacity: 1; }
+            5% { text-shadow: 0 0 2px #fff, 0 0 8px var(--gold-base), 0 0 15px var(--gold-glow), 0 0 25px #8b0000; opacity: 0.95; }
+            15% { text-shadow: 0 0 6px #fff, 0 0 12px var(--gold-base), 0 0 25px var(--gold-glow), 0 0 35px #8b0000; opacity: 0.8; }
+            25% { text-shadow: 0 0 3px #fff, 0 0 9px var(--gold-base), 0 0 18px var(--gold-glow), 0 0 28px #8b0000; opacity: 1; }
+            35% { text-shadow: 0 0 7px #fff, 0 0 14px var(--gold-base), 0 0 22px var(--gold-glow), 0 0 32px #8b0000; opacity: 0.9; }
+            45% { text-shadow: 0 0 4px #fff, 0 0 10px var(--gold-base), 0 0 20px var(--gold-glow), 0 0 30px #8b0000; opacity: 0.85; }
+            50% { text-shadow: 0 0 5px #fff, 0 0 11px var(--gold-base), 0 0 21px var(--gold-glow), 0 0 31px #8b0000; opacity: 1; }
+            65% { text-shadow: 0 0 2px #fff, 0 0 8px var(--gold-base), 0 0 15px var(--gold-glow), 0 0 25px #8b0000; opacity: 0.7; }
+            75% { text-shadow: 0 0 6px #fff, 0 0 13px var(--gold-base), 0 0 24px var(--gold-glow), 0 0 34px #8b0000; opacity: 0.95; }
+            85% { text-shadow: 0 0 3px #fff, 0 0 9px var(--gold-base), 0 0 18px var(--gold-glow), 0 0 28px #8b0000; opacity: 0.8; }
+            95% { text-shadow: 0 0 8px #fff, 0 0 15px var(--gold-base), 0 0 25px var(--gold-glow), 0 0 35px #8b0000; opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-container">
+        <svg class="silhouette" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 
+                     C 44 5, 41 14, 43 23
+                     C 44.5 28, 43 32, 38 35
+                     C 35 37, 34 40, 34 45
+                     C 34 60, 26 80, 20 105
+                     C 14 130, 8 142, 2 150
+                     L 98 150
+                     C 92 142, 86 130, 80 105
+                     C 74 80, 66 60, 66 45
+                     C 66 40, 65 37, 62 35
+                     C 57 32, 55.5 28, 57 23
+                     C 59 14, 56 5, 50 5 Z" />
+        </svg>
+
+        <svg class="ruby-overlay" viewBox="0 0 40 25" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(20, 11)">
+                <polygon points="0,-6 4,-3 4,2 0,6 -4,2 -4,-3" fill="#3a0006" />
+                
+                <polygon class="ruby-facet" points="0,0 -4,-3 0,-6" fill="#80001a" />
+                <polygon class="ruby-facet" points="0,0 0,-6 4,-3" fill="#b30024" />
+                <polygon class="ruby-facet" points="0,0 4,-3 4,2" fill="#e60033" />
+                <polygon class="ruby-facet" points="0,0 4,2 0,6" fill="#ff1a4d" />
+                <polygon class="ruby-facet" points="0,0 0,6 -4,2" fill="#ff4d73" />
+                <polygon class="ruby-facet" points="0,0 -4,2 -4,-3" fill="#b30024" />
+                
+                <polygon points="-1.5,-1 0,-3 1.5,-1 0,1" fill="#ff809b" opacity="0.8" />
+                <circle cx="0.5" cy="-2" r="0.4" fill="#ffffff" />
+            </g>
+        </svg>
+
+<svg class="fox-outline" viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,25 25,10 35,45" />
+            <polygon points="50,25 75,10 65,45" />
+            
+            <polygon points="35,45 50,85 20,55" />
+            <polygon points="65,45 50,85 80,55" />
+            
+            <polygon points="50,25 35,45 50,55" />
+            <polygon points="50,25 65,45 50,55" />
+            
+            <polygon points="35,45 50,55 50,85" />
+            <polygon points="65,45 50,55 50,85" />
+            
+            <polyline points="25,10 50,20 75,10" />
+
+            <path d="M 65,45 H 90 V 150" />
+        </svg>      
+
+    </div>
+
+    <div class="invitation-text">
+        <h1 id="guestName" class="guest-name flame-text">Honored Guest</h1>
+        <p class="invitation-body flame-text">
+            You are hereby cordially invited to the Queen's masquerade ball on the 364th day of the 499th year of the anniversary of Twin Haven
+        </p>
+    </div>
+
+    <script>
+        function getGuestName() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name');
+            if (name) {
+                document.getElementById('guestName').textContent = decodeURIComponent(name);
+            }
+        }
+        window.onload = getGuestName;
+    </script>
+
+</body>
+</html>
